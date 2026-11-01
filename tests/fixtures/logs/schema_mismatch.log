@@ -1,0 +1,59 @@
+# batch-id: daily-rollup-20260722-0300
+# job-name: daily_rollup
+# spark.executor.memory: 8g
+# spark.executor.instances: 10
+# spark.sql.shuffle.partitions: 200
+
+26/07/22 03:00:11 INFO SparkContext: Running Spark version 3.5.1
+26/07/22 03:00:11 INFO SparkContext: Submitted application: daily_rollup
+26/07/22 03:00:12 INFO ResourceUtils: Resources for spark.driver: cores -> 4, memory -> 8192m
+26/07/22 03:00:13 INFO SecurityManager: Changing view acls to: spark
+26/07/22 03:00:14 INFO Utils: Successfully started service 'sparkDriver' on port 41123.
+26/07/22 03:00:15 INFO SparkEnv: Registering MapOutputTracker
+26/07/22 03:00:15 INFO SparkEnv: Registering BlockManagerMaster
+26/07/22 03:00:16 INFO DiskBlockManager: Created local directory at /tmp/blockmgr-3f8a1c22-9b0e-4a11-b7d1-2c9e40aa1f33
+26/07/22 03:00:16 INFO MemoryStore: MemoryStore started with capacity 4.6 GiB
+26/07/22 03:00:17 INFO YarnClientSchedulerBackend: Application application_1753152000000_0417 has started running.
+26/07/22 03:00:18 INFO GoogleHadoopFileSystem: GHFS version: 2.2.16
+26/07/22 03:00:21 INFO SharedState: Warehouse path is 'file:/opt/spark/work-dir/spark-warehouse'.
+26/07/22 03:00:24 INFO InMemoryFileIndex: It took 1892 ms to list leaf files for 1 paths.
+26/07/22 03:00:26 INFO FileSourceStrategy: Pushed Filters:
+26/07/22 03:00:27 INFO ParquetFileFormat: Reading schema from gs://analytics-raw/events/
+26/07/22 03:00:28 INFO ParquetUtils: Merged schema:
+26/07/22 03:00:28 INFO ParquetUtils:   root
+26/07/22 03:00:28 INFO ParquetUtils:    |-- user_id: string (nullable = false)
+26/07/22 03:00:28 INFO ParquetUtils:    |-- session_id: string (nullable = false)
+26/07/22 03:00:28 INFO ParquetUtils:    |-- event_timestamp: timestamp (nullable = false)
+26/07/22 03:00:28 INFO ParquetUtils:    |-- revenue: double (nullable = true)
+26/07/22 03:00:29 INFO CodeGenerator: Code generated in 214.882 ms
+26/07/22 03:00:29 ERROR DataFrameQueryContextLogger: [UNRESOLVED_COLUMN.WITH_SUGGESTION] A column, variable, or function parameter with name `event_ts` cannot be resolved. Did you mean one of the following? [`revenue`, `user_id`, `event_timestamp`, `session_id`]. SQLSTATE: 42703
+26/07/22 03:00:29 ERROR DataFrameQueryContextLogger: == Query context ==
+26/07/22 03:00:29 ERROR DataFrameQueryContextLogger: file: /opt/spark/work-dir/jobs/daily_rollup.py, line 23, fragment: col
+Traceback (most recent call last):
+  File "/opt/spark/work-dir/jobs/daily_rollup.py", line 42, in <module>
+    main()
+  File "/opt/spark/work-dir/jobs/daily_rollup.py", line 36, in main
+    result = rollup(events)
+             ^^^^^^^^^^^^^^
+  File "/opt/spark/work-dir/jobs/daily_rollup.py", line 23, in rollup
+    events.withColumn("event_date", F.to_date(F.col("event_ts")))
+  File "/opt/spark/python/lib/pyspark.zip/pyspark/sql/dataframe.py", line 5175, in withColumn
+  File "/opt/spark/python/lib/pyspark.zip/pyspark/errors/exceptions/captured.py", line 185, in deco
+    raise converted from None
+pyspark.errors.exceptions.captured.AnalysisException: [UNRESOLVED_COLUMN.WITH_SUGGESTION] A column, variable, or function parameter with name `event_ts` cannot be resolved. Did you mean one of the following? [`revenue`, `user_id`, `event_timestamp`, `session_id`]. SQLSTATE: 42703;
+'Project [user_id#10, session_id#11, event_timestamp#12, revenue#13, 'to_date('event_ts) AS event_date#14]
++- Relation [user_id#10,session_id#11,event_timestamp#12,revenue#13] parquet
+
+	at org.apache.spark.sql.errors.QueryCompilationErrors$.unresolvedAttributeError(QueryCompilationErrors.scala:432)
+	at org.apache.spark.sql.catalyst.analysis.CheckAnalysis.failUnresolvedAttribute(CheckAnalysis.scala:244)
+	at org.apache.spark.sql.catalyst.analysis.CheckAnalysis.checkAnalysis0(CheckAnalysis.scala:363)
+	at org.apache.spark.sql.catalyst.analysis.Analyzer.executeAndCheck(Analyzer.scala:373)
+	at org.apache.spark.sql.execution.QueryExecution.assertAnalyzed(QueryExecution.scala:151)
+	at org.apache.spark.sql.Dataset.withColumn(Dataset.scala:2292)
+26/07/22 03:00:30 INFO SparkContext: Invoking stop() from shutdown hook
+26/07/22 03:00:30 INFO YarnClientSchedulerBackend: Shutting down all executors
+26/07/22 03:00:31 INFO MemoryStore: MemoryStore cleared
+26/07/22 03:00:31 INFO BlockManager: BlockManager stopped
+26/07/22 03:00:32 INFO SparkContext: Successfully stopped SparkContext
+26/07/22 03:00:32 INFO ShutdownHookManager: Shutdown hook called
+26/07/22 03:00:32 INFO ShutdownHookManager: Deleting directory /tmp/spark-9c1d0e77-4a55-4f2a-9c8a-1f6ab27c9d10

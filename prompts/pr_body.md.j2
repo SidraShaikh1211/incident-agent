@@ -1,0 +1,98 @@
+{% set effective_class = (report.revised_class if report and report.revised_class else verdict.failure_class) -%}
+## 🔧 Auto-fix: `{{ effective_class }}` in `{{ event.job_name }}`
+
+{% if narrative %}{{ narrative.summary }}
+
+{% endif -%}
+
+| | |
+|---|---|
+| **Batch** | `{{ event.batch_id }}` |
+| **Fingerprint** | `{{ event.fingerprint() }}` |
+| **Failed at** | {{ event.occurred_at.strftime('%Y-%m-%d %H:%M:%S') }} UTC |
+| **Classifier** | {{ verdict.failure_class }} @ {{ '%.2f'|format(verdict.confidence) }} |
+{%- if report %}
+| **Root cause** | {{ '%.2f'|format(report.confidence) }} confidence |
+{%- endif %}
+| **Verification** | Tier {{ verify.tier }} — {{ verify.tier_description }} |
+{%- if event.log_url %}
+| **Logs** | [Cloud Logging]({{ event.log_url }}) |
+{%- endif %}
+
+{% if narrative -%}
+### 👀 What to check before merging
+
+{{ narrative.reviewer_focus }}
+{%- endif %}
+
+### Root cause
+
+{% if report %}{{ report.explanation }}
+
+{% if report.locations -%}
+**Located at:**
+{% for loc in report.locations %}- `{{ loc.file_path }}`{% if loc.line_number %}:{{ loc.line_number }}{% endif %}{% if loc.excerpt %} — `{{ loc.excerpt }}`{% endif %}
+{% endfor %}
+{%- endif %}
+{%- if report.revised_class %}
+
+> The root-cause stage **revised the classification** from `{{ verdict.failure_class }}`
+> to `{{ report.revised_class }}` after reading the code. The classifier only saw
+> the log.
+{%- endif %}
+{% else %}{{ verdict.root_cause }}{% endif %}
+
+### Evidence from the failure log
+
+```
+{% for e in verdict.evidence -%}
+{{ '%5d'|format(e.line_number) }} | {{ e.excerpt }}
+{% endfor -%}
+```
+
+### What the agent changed
+
+{{ fix.rationale }}
+
+{% if fix.files_changed -%}
+**Files touched:**
+{% for f in fix.files_changed %}- `{{ f }}`
+{% endfor %}
+{%- endif %}
+
+### Verification output
+
+```
+{{ verify.output }}
+```
+
+{% if violations -%}
+### ⚠️ Guardrail denials during this run
+
+The agent attempted actions outside its permitted scope. These were blocked,
+but they are worth a look — they can indicate the fix is reaching beyond the
+intended boundary.
+
+{{ violations }}
+{%- endif %}
+
+---
+
+{% if narrative and narrative.residual_risk -%}
+> ⚠️ **Residual risk.** {{ narrative.residual_risk }}
+{% endif -%}
+{% if verify.tier < 2 -%}
+> ⚠️ **Weakly verified.** {{ verify.tier_description }}. No test suite exercised
+> this change — review the logic carefully rather than trusting the checkmark.
+{% endif -%}
+{% if report and report.confidence < 0.85 -%}
+> ⚠️ **Moderate root-cause confidence** ({{ '%.2f'|format(report.confidence) }}).
+> Confirm the located code is genuinely the cause before merging.
+{% endif %}
+
+🤖 Draft PR opened automatically by the Spark incident agent
+(classify → root cause → fix → narrate). A human must review the diff and
+merge. The agent cannot merge, and never runs git itself.
+
+{% if attribution %}{{ attribution }}
+{% endif %}

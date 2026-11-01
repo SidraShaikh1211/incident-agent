@@ -1,0 +1,23 @@
+# batch-id: sessionize-20260721-0200
+# job-name: sessionize_events
+# spark.executor.memory: 4g
+# spark.executor.memoryOverhead: 384m
+# spark.executor.instances: 20
+# spark.sql.shuffle.partitions: 200
+
+26/07/21 02:00:14 INFO SparkContext: Submitted application: sessionize_events
+26/07/21 02:00:22 INFO YarnAllocator: Will request 20 executor container(s), each with 4 core(s) and 4480 MB memory
+26/07/21 02:04:11 INFO DAGScheduler: Submitting ShuffleMapStage 3 (MapPartitionsRDD[14]) with 200 tasks
+26/07/21 02:09:48 WARN TaskSetManager: Lost task 43.0 in stage 3.0 (TID 812) (10.128.0.19 executor 7): ExecutorLostFailure (executor 7 exited caused by one of the running tasks) Reason: Container killed by YARN for exceeding physical memory limits. 4.9 GB of 4.4 GB physical memory used. Consider boosting spark.executor.memoryOverhead or disabling yarn.nodemanager.vmem-check-enabled because of YARN-4714.
+26/07/21 02:09:49 INFO YarnAllocator: Completed container container_1753063200000_0233_01_000008 on host: 10.128.0.19 (state: COMPLETE, exit status: 143)
+26/07/21 02:10:502 WARN TaskSetManager: Lost task 91.0 in stage 3.0 (TID 860) (10.128.0.22 executor 11): ExecutorLostFailure (executor 11 exited caused by one of the running tasks) Reason: Container killed by YARN for exceeding physical memory limits. 5.1 GB of 4.4 GB physical memory used.
+26/07/21 02:12:33 WARN TaskSetManager: Lost task 43.3 in stage 3.0 (TID 903) (10.128.0.31 executor 18): ExecutorLostFailure (executor 18 exited caused by one of the running tasks) Reason: Container killed by YARN for exceeding physical memory limits. 5.0 GB of 4.4 GB physical memory used.
+26/07/21 02:12:34 ERROR TaskSetManager: Task 43 in stage 3.0 failed 4 times; aborting job
+26/07/21 02:12:34 INFO DAGScheduler: ShuffleMapStage 3 failed in 508.221 s due to Job aborted due to stage failure: Task 43 in stage 3.0 failed 4 times, most recent failure: Lost task 43.3 in stage 3.0 (TID 903): ExecutorLostFailure (executor 18 exited caused by one of the running tasks) Reason: Container killed by YARN for exceeding physical memory limits. 5.0 GB of 4.4 GB physical memory used.
+Traceback (most recent call last):
+  File "/opt/spark/work-dir/jobs/sessionize.py", line 71, in <module>
+    main()
+  File "/opt/spark/work-dir/jobs/sessionize.py", line 64, in main
+    sessions.write.mode("overwrite").parquet(OUTPUT)
+pyspark.errors.exceptions.captured.AnalysisException: Job aborted due to stage failure: Task 43 in stage 3.0 failed 4 times
+26/07/21 02:12:36 INFO SparkContext: Invoking stop() from shutdown hook

@@ -1,0 +1,11 @@
+# batch-id: hourly-agg-20260722-1400
+# job-name: hourly_agg
+
+26/07/22 14:00:12 INFO SparkContext: Submitted application: hourly_agg
+26/07/22 14:03:41 WARN YarnSchedulerBackend$YarnSchedulerEndpoint: Requesting driver to remove executor 4 for reason Container marked as failed: container_1753192800000_0088_01_000005 on host: 10.128.0.44. Exit status: -100. Diagnostics: Container released on a *lost* node.
+26/07/22 14:03:41 WARN TaskSetManager: Lost task 12.0 in stage 2.0 (TID 244) (10.128.0.44 executor 4): ExecutorLostFailure (executor 4 exited unrelated to the running tasks) Reason: Container released on a *lost* node.
+26/07/22 14:03:52 INFO YarnAllocator: Driver requested a total number of 8 executor(s) to compensate for preempted capacity.
+26/07/22 14:04:19 WARN TaskSetManager: Lost task 12.1 in stage 2.0 (TID 251) (10.128.0.51 executor 9): ExecutorLostFailure (executor 9 exited unrelated to the running tasks) Reason: Spot VM preemption.
+26/07/22 14:05:02 ERROR TaskSetManager: Task 12 in stage 2.0 failed 4 times; aborting job
+26/07/22 14:05:02 INFO DAGScheduler: Job 1 failed: Job aborted due to stage failure: Task 12 in stage 2.0 failed 4 times, most recent failure: Lost task 12.3 in stage 2.0 (TID 268): ExecutorLostFailure (executor 14 exited unrelated to the running tasks) Reason: Spot VM preemption.
+26/07/22 14:05:03 INFO SparkContext: Invoking stop() from shutdown hook

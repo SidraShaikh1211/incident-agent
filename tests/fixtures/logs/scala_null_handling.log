@@ -1,0 +1,36 @@
+# batch-id: treasury-positions-20260723-0400
+# job-name: treasury_positions
+# spark.executor.memory: 8g
+# spark.executor.instances: 12
+
+26/07/23 04:00:09 INFO SparkContext: Running Spark version 3.5.1
+26/07/23 04:00:10 INFO SparkContext: Submitted application: treasury_positions
+26/07/23 04:00:14 INFO ResourceUtils: Resources for spark.driver: cores -> 4, memory -> 8192m
+26/07/23 04:00:22 INFO SharedState: Warehouse path is 'file:/opt/spark/work-dir/spark-warehouse'.
+26/07/23 04:00:31 INFO FileSourceScanExec: Pushed Filters: IsNotNull(book_id)
+26/07/23 04:00:33 INFO DAGScheduler: Submitting ResultStage 2 (MapPartitionsRDD[9]) with 200 tasks
+26/07/23 04:00:41 WARN TaskSetManager: Lost task 17.0 in stage 2.0 (TID 219) (10.128.0.14 executor 3): java.lang.NullPointerException
+	at com.dbhackathon.treasury.positions.PositionEnricher$.$anonfun$enrich$3(PositionEnricher.scala:87)
+	at scala.collection.immutable.List.map(List.scala:246)
+	at com.dbhackathon.treasury.positions.PositionEnricher$.enrich(PositionEnricher.scala:82)
+	at com.dbhackathon.treasury.positions.PositionsJob$.$anonfun$run$2(PositionsJob.scala:54)
+	at org.apache.spark.sql.execution.MapPartitionsExec.$anonfun$doExecute$1(objects.scala:200)
+	at org.apache.spark.rdd.RDD.computeOrReadCheckpoint(RDD.scala:365)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:620)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+26/07/23 04:00:47 WARN TaskSetManager: Lost task 17.1 in stage 2.0 (TID 224) (10.128.0.19 executor 7): java.lang.NullPointerException
+	at com.dbhackathon.treasury.positions.PositionEnricher$.$anonfun$enrich$3(PositionEnricher.scala:87)
+	at com.dbhackathon.treasury.positions.PositionEnricher$.enrich(PositionEnricher.scala:82)
+26/07/23 04:00:55 ERROR TaskSetManager: Task 17 in stage 2.0 failed 4 times; aborting job
+26/07/23 04:00:55 INFO DAGScheduler: ResultStage 2 failed in 22.104 s due to Job aborted due to stage failure: Task 17 in stage 2.0 failed 4 times, most recent failure: Lost task 17.3 in stage 2.0 (TID 231) (10.128.0.22 executor 11): java.lang.NullPointerException
+	at com.dbhackathon.treasury.positions.PositionEnricher$.$anonfun$enrich$3(PositionEnricher.scala:87)
+Exception in thread "main" org.apache.spark.SparkException: Job aborted due to stage failure: Task 17 in stage 2.0 failed 4 times, most recent failure: Lost task 17.3 in stage 2.0 (TID 231): java.lang.NullPointerException
+	at com.dbhackathon.treasury.positions.PositionEnricher$.$anonfun$enrich$3(PositionEnricher.scala:87)
+	at org.apache.spark.scheduler.DAGScheduler.failJobAndIndependentStages(DAGScheduler.scala:2856)
+	at org.apache.spark.sql.execution.SQLExecution$.withNewExecutionId(SQLExecution.scala:107)
+	at com.dbhackathon.treasury.positions.PositionsJob$.main(PositionsJob.scala:31)
+	at com.dbhackathon.treasury.positions.PositionsJob.main(PositionsJob.scala)
+26/07/23 04:00:56 INFO SparkContext: Invoking stop() from shutdown hook
+26/07/23 04:00:56 INFO SparkContext: Successfully stopped SparkContext

@@ -1,0 +1,10 @@
+[project]
+name = "analytics-spark-jobs"
+version = "0.3.1"
+description = "Batch Spark jobs for the analytics warehouse."
+requires-python = ">=3.11"
+dependencies = ["pyspark>=3.5"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

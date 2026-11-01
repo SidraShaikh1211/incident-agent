@@ -1,0 +1,10 @@
+[project]
+name = "treasury-fx-jobs"
+version = "1.2.0"
+description = "Batch Spark jobs for the treasury FX warehouse."
+requires-python = ">=3.11"
+dependencies = ["pyspark>=3.5"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

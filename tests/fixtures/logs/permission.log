@@ -1,0 +1,18 @@
+# batch-id: export-20260722-0600
+# job-name: export_metrics
+
+26/07/22 06:00:11 INFO SparkContext: Submitted application: export_metrics
+26/07/22 06:00:29 INFO DAGScheduler: Job 0 finished: parquet at NativeMethodAccessorImpl.java:0, took 12.882 s
+26/07/22 06:00:31 ERROR Utils: Aborting task
+com.google.cloud.hadoop.repackaged.gcs.com.google.api.client.googleapis.json.GoogleJsonResponseException: 403 Forbidden
+GET https://storage.googleapis.com/storage/v1/b/analytics-exports/o/metrics%2Fpart-00000.parquet
+{
+  "code" : 403,
+  "message" : "spark-runner@hack-team-treasury-geeks-2026.iam.gserviceaccount.com does not have storage.objects.create access to the Google Cloud Storage object.",
+  "errors" : [ { "domain" : "global", "reason" : "forbidden" } ]
+}
+	at com.google.cloud.hadoop.repackaged.gcs.com.google.api.client.googleapis.json.GoogleJsonResponseException.from(GoogleJsonResponseException.java:146)
+	at org.apache.spark.internal.io.SparkHadoopWriter$.write(SparkHadoopWriter.scala:88)
+26/07/22 06:00:32 ERROR FileFormatWriter: Aborting job caused by task failure
+pyspark.errors.exceptions.captured.AnalysisException: Job aborted.
+26/07/22 06:00:33 INFO SparkContext: Invoking stop() from shutdown hook

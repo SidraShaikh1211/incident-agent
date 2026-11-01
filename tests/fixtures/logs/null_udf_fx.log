@@ -1,0 +1,85 @@
+# batch-id: fx-normalize-20260723-0700
+# job-name: fx_normalize
+# spark.executor.memory: 8g
+# spark.executor.instances: 12
+# spark.sql.shuffle.partitions: 200
+# spark.sql.execution.arrow.pyspark.enabled: false
+
+26/07/23 07:00:08 INFO SparkContext: Running Spark version 3.5.1
+26/07/23 07:00:08 INFO SparkContext: Submitted application: fx_normalize
+26/07/23 07:00:09 INFO ResourceUtils: Resources for spark.driver: cores -> 4, memory -> 8192m
+26/07/23 07:00:10 INFO SecurityManager: Changing view acls to: spark
+26/07/23 07:00:11 INFO Utils: Successfully started service 'sparkDriver' on port 39847.
+26/07/23 07:00:11 INFO SparkEnv: Registering MapOutputTracker
+26/07/23 07:00:12 INFO SparkEnv: Registering BlockManagerMaster
+26/07/23 07:00:12 INFO DiskBlockManager: Created local directory at /tmp/blockmgr-7a2e91c4-3d18-4b60-8e55-1af0c3b7de92
+26/07/23 07:00:13 INFO MemoryStore: MemoryStore started with capacity 4.6 GiB
+26/07/23 07:00:14 INFO YarnClientSchedulerBackend: Application application_1753246800000_0611 has started running.
+26/07/23 07:00:15 INFO GoogleHadoopFileSystem: GHFS version: 2.2.16
+26/07/23 07:00:17 INFO SharedState: Warehouse path is 'file:/opt/spark/work-dir/spark-warehouse'.
+26/07/23 07:00:19 INFO InMemoryFileIndex: It took 1477 ms to list leaf files for 1 paths.
+26/07/23 07:00:20 INFO ParquetFileFormat: Reading schema from gs://treasury-raw/fx_quotes/
+26/07/23 07:00:20 INFO ParquetUtils: Merged schema:
+26/07/23 07:00:20 INFO ParquetUtils:   root
+26/07/23 07:00:20 INFO ParquetUtils:    |-- quote_id: string (nullable = false)
+26/07/23 07:00:20 INFO ParquetUtils:    |-- base_ccy: string (nullable = true)
+26/07/23 07:00:20 INFO ParquetUtils:    |-- quote_ccy: string (nullable = true)
+26/07/23 07:00:20 INFO ParquetUtils:    |-- bid: double (nullable = false)
+26/07/23 07:00:20 INFO ParquetUtils:    |-- ask: double (nullable = false)
+26/07/23 07:00:20 INFO ParquetUtils:    |-- quoted_at: timestamp (nullable = false)
+26/07/23 07:00:22 INFO CodeGenerator: Code generated in 187.441 ms
+26/07/23 07:00:23 INFO DAGScheduler: Submitting ResultStage 0 (MapPartitionsRDD[6]) with 200 tasks
+26/07/23 07:00:24 INFO PythonRunner: Times: total = 61, boot = 24, init = 31, finish = 6
+26/07/23 07:00:31 WARN TaskSetManager: Lost task 118.0 in stage 0.0 (TID 118) (10.128.0.27 executor 5): org.apache.spark.api.python.PythonException: Traceback (most recent call last):
+  File "/opt/spark/python/lib/pyspark.zip/pyspark/worker.py", line 1834, in main
+    process()
+  File "/opt/spark/python/lib/pyspark.zip/pyspark/worker.py", line 1826, in process
+    serializer.dump_stream(out_iter, outfile)
+  File "/opt/spark/python/lib/pyspark.zip/pyspark/serializers.py", line 224, in dump_stream
+    self.serializer.dump_stream(self._batched(iterator), stream)
+  File "/opt/spark/python/lib/pyspark.zip/pyspark/worker.py", line 118, in <lambda>
+    verify_result_type(f(*a)), len(a)
+                      ^^^^^^
+  File "/opt/spark/work-dir/jobs/normalize_fx.py", line 27, in canonical_pair
+    return f"{base.strip().upper()}/{quote.strip().upper()}"
+                                     ^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strip'
+
+	at org.apache.spark.api.python.BasePythonRunner$ReaderIterator.handlePythonException(PythonRunner.scala:572)
+	at org.apache.spark.sql.execution.python.PythonUDFRunner$$anon$2.read(PythonUDFRunner.scala:112)
+	at org.apache.spark.api.python.BasePythonRunner$ReaderIterator.hasNext(PythonRunner.scala:525)
+	at org.apache.spark.InterruptibleIterator.hasNext(InterruptibleIterator.scala:37)
+	at org.apache.spark.sql.execution.SparkPlan.$anonfun$getByteArrayRdd$1(SparkPlan.scala:388)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:620)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+26/07/23 07:00:35 WARN TaskSetManager: Lost task 118.1 in stage 0.0 (TID 201) (10.128.0.31 executor 9): org.apache.spark.api.python.PythonException: Traceback (most recent call last):
+  File "/opt/spark/work-dir/jobs/normalize_fx.py", line 27, in canonical_pair
+    return f"{base.strip().upper()}/{quote.strip().upper()}"
+AttributeError: 'NoneType' object has no attribute 'strip'
+
+26/07/23 07:00:41 ERROR TaskSetManager: Task 118 in stage 0.0 failed 4 times; aborting job
+26/07/23 07:00:41 INFO DAGScheduler: ResultStage 0 failed in 18.204 s
+26/07/23 07:00:41 INFO TaskSchedulerImpl: Cancelling stage 0
+Traceback (most recent call last):
+  File "/opt/spark/work-dir/jobs/normalize_fx.py", line 53, in <module>
+    main()
+  File "/opt/spark/work-dir/jobs/normalize_fx.py", line 48, in main
+    result.write.mode("overwrite").parquet(TARGET)
+  File "/opt/spark/python/lib/pyspark.zip/pyspark/sql/readwriter.py", line 1721, in parquet
+  File "/opt/spark/python/lib/pyspark.zip/pyspark/errors/exceptions/captured.py", line 185, in deco
+    raise converted from None
+pyspark.errors.exceptions.captured.PythonException:
+  An exception was thrown from the Python worker. Please see the stack trace below.
+Traceback (most recent call last):
+  File "/opt/spark/work-dir/jobs/normalize_fx.py", line 27, in canonical_pair
+    return f"{base.strip().upper()}/{quote.strip().upper()}"
+AttributeError: 'NoneType' object has no attribute 'strip'
+
+26/07/23 07:00:42 INFO SparkContext: Invoking stop() from shutdown hook
+26/07/23 07:00:42 INFO YarnClientSchedulerBackend: Shutting down all executors
+26/07/23 07:00:43 INFO MemoryStore: MemoryStore cleared
+26/07/23 07:00:43 INFO BlockManager: BlockManager stopped
+26/07/23 07:00:43 INFO SparkContext: Successfully stopped SparkContext
+26/07/23 07:00:44 INFO ShutdownHookManager: Shutdown hook called
+26/07/23 07:00:44 INFO ShutdownHookManager: Deleting directory /tmp/spark-2b6f4d19-8c07-4e3a-9f21-6d54ba0e7c88

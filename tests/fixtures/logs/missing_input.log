@@ -1,0 +1,14 @@
+# batch-id: enrich-20260722-0500
+# job-name: enrich_orders
+
+26/07/22 05:00:09 INFO SparkContext: Submitted application: enrich_orders
+26/07/22 05:00:18 INFO GoogleHadoopFileSystem: GHFS version: 2.2.16
+26/07/22 05:00:21 INFO InMemoryFileIndex: It took 402 ms to list leaf files for 1 paths.
+26/07/22 05:00:22 ERROR Client: Application diagnostics message: User application exited with status 1
+Traceback (most recent call last):
+  File "/opt/spark/work-dir/jobs/enrich_orders.py", line 55, in <module>
+    main()
+  File "/opt/spark/work-dir/jobs/enrich_orders.py", line 44, in main
+    dim = spark.read.parquet("gs://analytics-raw/dim_customer/dt=2026-07-22/")
+pyspark.errors.exceptions.captured.AnalysisException: [PATH_NOT_FOUND] Path does not exist: gs://analytics-raw/dim_customer/dt=2026-07-22/. SQLSTATE: 42K03
+26/07/22 05:00:23 INFO SparkContext: Invoking stop() from shutdown hook
