@@ -8,7 +8,7 @@ com.google.cloud.hadoop.repackaged.gcs.com.google.api.client.googleapis.json.Goo
 GET https://storage.googleapis.com/storage/v1/b/analytics-exports/o/metrics%2Fpart-00000.parquet
 {
   "code" : 403,
-  "message" : "spark-runner@hack-team-treasury-geeks-2026.iam.gserviceaccount.com does not have storage.objects.create access to the Google Cloud Storage object.",
+  "message" : "spark-runner@example-gcp-project.iam.gserviceaccount.com does not have storage.objects.create access to the Google Cloud Storage object.",
   "errors" : [ { "domain" : "global", "reason" : "forbidden" } ]
 }
 	at com.google.cloud.hadoop.repackaged.gcs.com.google.api.client.googleapis.json.GoogleJsonResponseException.from(GoogleJsonResponseException.java:146)

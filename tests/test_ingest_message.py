@@ -22,7 +22,7 @@ LOG_ENTRY = {
     "resource": {
         "type": "cloud_dataproc_batch",
         "labels": {
-            "project_id": "hack-team-treasury-geeks-2026",
+            "project_id": "example-gcp-project",
             "location": "us-central1",
             "batch_id": "daily-rollup-20260722-0300",
         },
@@ -33,7 +33,7 @@ LOG_ENTRY = {
 # What a human publishes to rehearse the flow.
 PLAIN = {
     "job_id": "daily-rollup-20260722-0300",
-    "project": "hack-team-treasury-geeks-2026",
+    "project": "example-gcp-project",
     "region": "us-central1",
     "job_name": "daily_rollup",
     "labels": {"repo": "db-hackathon--treasury-geeks"},
@@ -44,7 +44,7 @@ def test_parses_a_cloud_logging_sink_entry() -> None:
     msg = parse(json.dumps(LOG_ENTRY).encode())
 
     assert msg.job_id == "daily-rollup-20260722-0300"
-    assert msg.project == "hack-team-treasury-geeks-2026"
+    assert msg.project == "example-gcp-project"
     assert msg.region == "us-central1"
     assert msg.is_batch is True
     assert msg.occurred_at.year == 2026

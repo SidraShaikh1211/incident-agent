@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Analyses failed Spark logs, patches the cause, and opens a draft PR."
 readme = "README.md"
 authors = [
-    { name = "Sidra Shaikh", email = "sidra12112000@gmail.com" }
+    { name = "Sidra Shaikh" }
 ]
 requires-python = ">=3.13"
 dependencies = [

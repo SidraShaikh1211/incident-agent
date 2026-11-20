@@ -28,11 +28,10 @@ class Settings(BaseSettings):
 
     # --- inference provider ---
     #: Route the agents through Claude on Vertex AI instead of the first-party
-    #: API. Off by default because `hack-team-treasury-geeks-2026` has **no
-    #: Anthropic publisher models enabled** — verified 2026-07-23, every
-    #: `publishers/anthropic/models/*` returns 404 at global, us-east5 and
-    #: us-central1, while `publishers/google/models/gemini-3.5-flash` returns
-    #: 200. Turn this on once an admin enables Claude in Vertex Model Garden.
+    #: API. Off by default: the hackathon's Vertex project had no Anthropic
+    #: publisher models enabled (every `publishers/anthropic/models/*` returned
+    #: 404 at global, us-east5 and us-central1) while Gemini was available.
+    #: Turn this on if Claude is enabled in your project's Model Garden.
     use_vertex: bool = False
     #: Defaults to `gcp_project` when unset.
     vertex_project: str | None = None
@@ -41,12 +40,11 @@ class Settings(BaseSettings):
     vertex_region: str = "global"
 
     # --- inference provider selection ---
-    #: `gemini` (Vertex, the hackathon project's only available family) or
-    #: `claude` (Claude Agent SDK, first-party API).
+    #: `gemini` (Vertex AI) or `claude` (Claude Agent SDK, first-party API).
     provider: str = "gemini"
 
-    #: Gemini model per agent. `gemini-3.5-flash` and `gemini-2.5-flash` are
-    #: confirmed available at location `global` on this project.
+    #: Gemini model per agent. `gemini-3.5-flash` and `gemini-2.5-flash` were
+    #: available at location `global` during development.
     gemini_classify_model: str = "gemini-3.5-flash"
     gemini_rootcause_model: str = "gemini-3.5-flash"
     gemini_fix_model: str = "gemini-3.5-flash"
@@ -158,8 +156,10 @@ class Settings(BaseSettings):
     #: Directory for the ``json`` store.
     run_store_dir: str = ".incident-agent/runs"
 
-    # --- gcp (unused in local mode) ---
-    gcp_project: str | None = "hack-team-treasury-geeks-2026"
+    # --- gcp ---
+    #: Required for the Gemini provider and the GCP ingestion path. There is
+    #: deliberately no default: set INCIDENT_GCP_PROJECT.
+    gcp_project: str | None = None
     gcp_region: str = "us-central1"
     pubsub_topic: str = "spark-failures"
     worker_job_name: str = "agent-worker"

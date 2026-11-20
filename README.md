@@ -1,5 +1,11 @@
 # Spark Incident Agent
 
+> **Hackathon project.** Built in a few days during a 2026 hackathon as a
+> working prototype, not production software. The local path (log file in,
+> draft PR out), the guardrails and the test suite are real and exercised; the
+> GCP ingestion path is written but has never run against a live failure. See
+> *Status* and *Known limitations* before trusting any of it with a real repo.
+
 Reads a failed Spark job's logs, works out why it broke, patches the cause in
 the job's repository, runs the tests, and opens a **draft pull request** with a
 root-cause writeup.
@@ -43,18 +49,16 @@ so verify before trusting it.
 Requires Python 3.13 and [uv](https://docs.astral.sh/uv/).
 
 **Inference runs on Gemini via Vertex AI** (`gemini-3.5-flash`, location
-`global`), billing to `hack-team-treasury-geeks-2026` and authenticating with
-Application Default Credentials:
+`global`). Copy `.env.example` to `.env`, set `INCIDENT_GCP_PROJECT` to a
+project with Vertex AI enabled, and authenticate with Application Default
+Credentials:
 
 ```bash
 gcloud auth application-default login
 ```
 
-Claude on Vertex was the original plan but **Anthropic models are not enabled on
-this project** — verified 2026-07-23: every `publishers/anthropic/models/*`
-returns 404 across `global`, `us-east5` and `us-central1`, while
-`publishers/google/models/gemini-3.5-flash` returns 200. The Claude path is
-still wired and tested; set `INCIDENT_PROVIDER=claude` if an admin enables it.
+The Claude path (Agent SDK) is wired and tested too: `INCIDENT_PROVIDER=claude`
+with a logged-in `claude` CLI or `ANTHROPIC_API_KEY`.
 
 ```bash
 uv sync
@@ -87,6 +91,16 @@ with `tests/fixtures/logs/null_udf_fx.log`.
 Drop `--dry-run` and set `GITHUB_TOKEN` to open actual draft PRs. `--provider
 claude` switches to the Agent SDK; `--model` overrides the fix-stage model for
 whichever provider is active.
+
+### Hackathon notes
+
+Claude on Vertex was the original plan, but the hackathon's Vertex project had
+no Anthropic publisher models enabled — every `publishers/anthropic/models/*`
+returned 404 across `global`, `us-east5` and `us-central1` while
+`publishers/google/models/gemini-3.5-flash` returned 200 — so the Gemini
+provider was written in a day and became the default. That is why two providers
+exist and why the guardrails live in shared pure functions rather than in
+either provider's tool layer.
 
 ## What it costs
 
@@ -248,7 +262,7 @@ prefix:
 | `INCIDENT_GEMINI_MAX_RETRIES` / `_RETRY_BACKOFF_S` | `3` / `1.0` | Retries on 429/5xx with exponential backoff |
 | `INCIDENT_NOTIFY_WEBHOOK_URL` | unset | Slack-compatible webhook for finished runs; unset means log only |
 | `INCIDENT_RUN_STORE` / `_RUN_STORE_DIR` | `none` / `.incident-agent/runs` | `none`, `json` or `firestore` |
-| `INCIDENT_GCP_PROJECT` | `hack-team-treasury-geeks-2026` | Vertex project, and the Pub/Sub project |
+| `INCIDENT_GCP_PROJECT` | **required** | Vertex project, and the Pub/Sub project. No default |
 | `INCIDENT_VERTEX_REGION` | `global` | Vertex location |
 
 ## Mapping a job to its repository
@@ -258,7 +272,7 @@ The agent cannot patch code it cannot find. Resolution order:
 1. **Dataproc batch labels** (preferred, per-run accurate):
    ```bash
    gcloud dataproc batches submit pyspark jobs/daily_rollup.py \
-     --labels repo=SidraShaikh1211--analytics-spark-jobs,git-sha=$(git rev-parse HEAD)
+     --labels repo=example-org--analytics-spark-jobs,git-sha=$(git rev-parse HEAD)
    ```
    GCP labels disallow `/`, so `org--name` expands to `org/name`.
 2. `config/job_registry.yaml`, keyed by job-name prefix.

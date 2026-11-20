@@ -14,10 +14,10 @@ from incident_agent.config import Settings
 
 
 def test_vertex_env_is_complete() -> None:
-    env = Settings(use_vertex=True, gcp_project="hack-team-treasury-geeks-2026").provider_env()
+    env = Settings(use_vertex=True, gcp_project="example-gcp-project").provider_env()
 
     assert env["CLAUDE_CODE_USE_VERTEX"] == "1"
-    assert env["ANTHROPIC_VERTEX_PROJECT_ID"] == "hack-team-treasury-geeks-2026"
+    assert env["ANTHROPIC_VERTEX_PROJECT_ID"] == "example-gcp-project"
     assert env["CLOUD_ML_REGION"] == "global"
 
 
@@ -74,7 +74,7 @@ def test_vertex_is_off_by_default() -> None:
 
 
 def test_gemini_is_the_default_provider() -> None:
-    """Claude is not enabled on the hackathon Vertex project; Gemini is."""
+    """Claude was not enabled on the hackathon's Vertex project; Gemini was."""
     s = Settings()
     assert s.provider == "gemini"
     assert s.gemini_classify_model.startswith("gemini-")

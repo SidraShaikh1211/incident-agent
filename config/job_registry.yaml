@@ -5,5 +5,5 @@
 # (GCP labels disallow '/', so `org--name` is expanded to `org/name`.)
 jobs:
   daily_rollup:
-    repo: SidraShaikh1211/analytics-spark-jobs
+    repo: example-org/analytics-spark-jobs
     ref: main
